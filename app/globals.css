@@ -1,0 +1,330 @@
+:root {
+  --white: #ffffff;
+  --black: #121214;
+  --ink: #1a1a1e;
+  --ink-soft: #6b6f76;
+  --line: #e6e6e9;
+  --line-soft: #f0f0f2;
+
+  --red: #c8102e;
+  --red-hover: #ff2d42;
+  --red-soft: #fbe9eb;
+
+  --wa: #25d366;
+  --wa-dark: #128c4a;
+
+  --radius: 9px;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+a {
+  color: var(--red);
+}
+
+a:hover {
+  color: var(--red-hover);
+}
+
+/* .page spans the full browser width/height -- it's the outer shell, so
+   backgrounds and the footer reach edge to edge on any screen size.
+   .page-content is the readable column inside it; centered with its own
+   max-width so text/forms don't stretch absurdly wide on a desktop
+   monitor, while the page itself no longer looks like a narrow floating
+   card in a sea of blank space. */
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 56px 22px 40px;
+}
+
+.page-content.flush {
+  max-width: 560px;
+}
+
+.page-content.narrow-top {
+  padding-top: 44px;
+}
+
+/* ---- buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: var(--red-hover);
+  border-color: var(--red-hover);
+}
+
+.btn-primary:disabled {
+  background: var(--ink-soft);
+  border-color: var(--ink-soft);
+  cursor: default;
+  transform: none;
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.btn-outline:hover {
+  background: var(--red-soft);
+  border-color: var(--red-hover);
+  color: var(--red-hover);
+}
+
+.btn-wa {
+  background: var(--wa);
+  border-color: var(--wa);
+  color: #fff;
+  padding: 16px 20px;
+  font-size: 15.5px;
+}
+
+.btn-wa:hover {
+  background: var(--wa-dark);
+  border-color: var(--wa-dark);
+}
+
+/* ---- form elements ---- */
+.field-label {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 18px 0 7px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 13px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  font-size: 14.5px;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--white);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--red-soft);
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.input-cc {
+  width: 76px;
+  flex: none;
+  text-align: center;
+}
+
+.dropzone {
+  position: relative;
+  border: 1.5px dashed var(--line);
+  border-radius: 10px;
+  padding: 28px 18px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--line-soft);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.dropzone:hover {
+  border-color: var(--red);
+}
+
+.dropzone.dragging {
+  border-color: var(--red-hover);
+  background: var(--red-soft);
+}
+
+.dropzone input[type='file'] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.dropzone-hint {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+
+.dropzone-subhint {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+.dropzone-preview {
+  max-width: 100%;
+  max-height: 220px;
+  border-radius: 8px;
+}
+
+.error-text {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 14px;
+}
+
+.note-box {
+  margin-top: 26px;
+  padding: 14px 15px;
+  background: var(--red-soft);
+  border: 1px solid #f2c1c9;
+  border-radius: 8px;
+}
+
+.note-box p {
+  font-size: 13px;
+  margin: 0;
+  color: #8a0f26;
+}
+
+.note-box p + p {
+  margin-top: 10px;
+}
+
+.qr-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.qr-img {
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: var(--white);
+}
+
+.qr-placeholder {
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  background: var(--line-soft);
+}
+
+.qr-download {
+  font-size: 13px;
+  color: var(--red);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.qr-download:hover {
+  color: var(--red-hover);
+  border-bottom-color: var(--red-hover);
+}
+
+.stat-line {
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+/* ---- footer ---- */
+.site-footer {
+  background: var(--black);
+  color: #d8d8dc;
+  margin-top: auto;
+}
+
+.site-footer-inner {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 30px 22px 24px;
+}
+
+.footer-logo {
+  height: 22px;
+  width: auto;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.site-footer-grid {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  color: #a6a6ad;
+}
+
+.site-footer-grid a {
+  color: #a6a6ad;
+}
+
+.site-footer-grid a:hover {
+  color: var(--red-hover);
+}
+
+.site-footer-bottom {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #2a2a2e;
+  font-size: 12px;
+  color: #7a7a81;
+}
