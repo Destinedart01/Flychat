@@ -1,4 +1,5 @@
 import './globals.css';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { siteName } from '@/lib/siteConfig';
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <div className="page">
+          <Header />
           {children}
           <Footer />
         </div>

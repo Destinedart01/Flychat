@@ -3,9 +3,6 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 
-// Plain black-on-white QR code -- the free-tier version. A styled/branded
-// QR (custom color, logo in the middle) is a natural Pro-tier upgrade of
-// this same component later; not built yet, left out on purpose.
 export default function QrCode({ path, size = 168 }) {
   const [dataUrl, setDataUrl] = useState(null);
 

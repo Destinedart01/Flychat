@@ -28,7 +28,11 @@ export async function generateMetadata({ params }) {
   return {
     title,
     description,
-    openGraph: { title, description, images: [img] },
+    // Explicit alt text helps crawlers (WhatsApp, Instagram, etc.) resolve
+    // the preview image reliably. Note: link previews are cached per-URL
+    // by the platform scraping them -- since every flyer gets a unique
+    // slug, a freshly created link always starts with no stale cache.
+    openGraph: { title, description, images: [{ url: img, alt: title }] },
     twitter: { card: 'summary_large_image', title, description, images: [img] },
   };
 }
@@ -42,6 +46,8 @@ export default async function FlyerPage({ params }) {
 
   const img = imageUrl(flyer.image_path);
 
+  // Deliberately no <GridBackground /> here -- this is the one page a
+  // visitor actually lands on, so it stays clean: image, name, one button.
   return (
     <main className="page-content flush" style={{ padding: 0 }}>
       <img src={img} alt={flyer.business_name || 'Flyer'} style={{ width: '100%', display: 'block' }} />
