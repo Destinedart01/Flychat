@@ -7,7 +7,7 @@ import { slugify, randomSuffix } from '@/lib/slug';
 export const runtime = 'nodejs';
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX_UPLOAD_BYTES = 8 * 1024 * 1024; // 8MB
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4MB
 const MAX_LINKS_PER_IP_PER_WINDOW = 5;
 const RATE_WINDOW_MINUTES = 10;
 
