@@ -4,14 +4,17 @@ import { useState, useRef } from 'react';
 import QrCode from '@/components/QrCode';
 import FlyerPreviewCard from '@/components/FlyerPreviewCard';
 import GridBackground from '@/components/GridBackground';
+import { PLATFORMS, PLATFORM_KEYS, getPlatform } from '@/lib/platforms';
 
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export default function CreatePage() {
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
+  const [platform, setPlatform] = useState('whatsapp');
   const [countryCode, setCountryCode] = useState('+234');
   const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState('');
   const [businessName, setBusinessName] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,6 +22,8 @@ export default function CreatePage() {
   const [result, setResult] = useState(null);
   const [dragging, setDragging] = useState(false);
   const dragCounter = useRef(0);
+
+  const platformConfig = getPlatform(platform);
 
   function acceptFile(f) {
     if (!f) return;
@@ -69,16 +74,22 @@ export default function CreatePage() {
       setError('Please upload a flyer image.');
       return;
     }
-    if (!phone.trim()) {
+    if (platform === 'whatsapp' && !phone.trim()) {
       setError('Please enter a WhatsApp number.');
+      return;
+    }
+    if (platform !== 'whatsapp' && !username.trim()) {
+      setError(`Please enter your ${platformConfig.label} username.`);
       return;
     }
 
     setLoading(true);
     const formData = new FormData();
     formData.append('image', file);
+    formData.append('platform', platform);
     formData.append('countryCode', countryCode);
     formData.append('phone', phone);
+    formData.append('username', username);
     formData.append('businessName', businessName);
     formData.append('message', message);
 
@@ -112,7 +123,7 @@ export default function CreatePage() {
             </a>
           </p>
 
-          <FlyerPreviewCard imageSrc={preview} businessName={businessName} />
+          <FlyerPreviewCard imageSrc={preview} businessName={businessName} platform={platform} />
 
           <div className="note-box">
             <p>
@@ -169,20 +180,48 @@ export default function CreatePage() {
             </div>
           )}
 
-          <label className="field-label">WhatsApp number</label>
-          <div className="input-row">
-            <input
-              className="input input-cc"
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value)}
-            />
-            <input
-              className="input"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="801 234 5678"
-            />
+          <label className="field-label">Where should it send people?</label>
+          <div className="platform-tabs">
+            {PLATFORM_KEYS.map((key) => (
+              <button
+                key={key}
+                type="button"
+                className={`platform-tab${platform === key ? ' active' : ''}`}
+                onClick={() => setPlatform(key)}
+              >
+                {PLATFORMS[key].label}
+              </button>
+            ))}
           </div>
+
+          {platform === 'whatsapp' ? (
+            <>
+              <label className="field-label">WhatsApp number</label>
+              <div className="input-row">
+                <input
+                  className="input input-cc"
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                />
+                <input
+                  className="input"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="801 234 5678"
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <label className="field-label">{platformConfig.label} username</label>
+              <input
+                className="input"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="@yourusername"
+              />
+            </>
+          )}
 
           <label className="field-label">Business or flyer name (optional)</label>
           <input
@@ -192,13 +231,24 @@ export default function CreatePage() {
             placeholder="e.g. Zeysah Luxe"
           />
 
-          <label className="field-label">Message that opens in WhatsApp (optional)</label>
-          <input
-            className="input"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Hi, I saw your flyer and I'd like to order..."
-          />
+          {platformConfig.supportsMessage ? (
+            <>
+              <label className="field-label">
+                Message that opens in {platformConfig.label} (optional)
+              </label>
+              <input
+                className="input"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Hi, I saw your flyer and I'd like to order..."
+              />
+            </>
+          ) : (
+            <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', marginTop: 14, lineHeight: 1.5 }}>
+              Instagram links can't open with a pre-filled message — visitors will land on a
+              blank chat with you.
+            </p>
+          )}
 
           {error && <p className="error-text">{error}</p>}
 

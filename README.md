@@ -1,21 +1,30 @@
 # Flychat
 
-A no-login tool: upload a flyer image + WhatsApp number, get a link. Visitors
-see the flyer and one button straight into WhatsApp DM.
+A no-login tool: upload a flyer image + your WhatsApp, Telegram, or
+Instagram contact, get a link. Visitors see the flyer and one button
+straight into a chat with you.
+
+## IMPORTANT: database migration needed before this deploy works
+
+This version adds Telegram/Instagram support, which changed the `flyers`
+table. Your Supabase project already has the old schema from before, so
+you need to run one migration first:
+
+1. Go to Supabase → SQL Editor
+2. Paste and run `supabase/migration-platforms.sql`
+3. That's it -- no data is lost, it adds columns and renames one
+
+(If you were setting this up completely fresh instead, you'd just run
+`supabase/schema.sql` and wouldn't need the migration file at all.)
 
 ## Already set up (don't redo these)
 
-- Supabase project created, `supabase/schema.sql` already run
+- Supabase project created
 - Storage bucket named `flyers`, set to Public
 - Vercel project deployed, env vars set:
   - `SUPABASE_URL`
-  - `SUPABASE_SERVICE_ROLE_KEY` (the `sb_secret_...` key from Supabase's
-    newer API key system -- functionally the same as the old `service_role`
-    key, just renamed)
+  - `SUPABASE_SERVICE_ROLE_KEY` (the `sb_secret_...` key)
   - `NEXT_PUBLIC_SITE_URL`
-
-If any of those ever need to change, they live in Vercel → Settings →
-Environment Variables (remember: changes need a Redeploy to take effect).
 
 ## Local development
 
@@ -26,71 +35,109 @@ npm run dev
 
 ## How it works
 
-- `/` — landing page
-- `/create` — upload form (drag-and-drop or tap), WhatsApp number, optional
-  business name/message. After submitting, shows a live preview card of
-  what the public page will look like, the link (green), the private
-  manage link (black, with a warning to save it), and a QR code
-- `/api/create` — validates the upload (4MB cap, matched to Vercel's own
-  ~4.5MB function body limit so people get our error message instead of a
-  platform-level one), strips EXIF + compresses to WebP via `sharp`,
-  uploads to Supabase Storage, generates a unique slug + private manage
-  token, writes the DB row
+- `/` — landing page. The hero headline cycles through "WhatsApp" /
+  "Telegram" / "Instagram", cards fade in on load and lift slightly on
+  hover, plus a "Where to put your link" section (link in bio, QR on
+  flyers/packaging, Stories, SMS)
+- `/create` — upload form (drag-and-drop or tap), a platform selector
+  (WhatsApp / Telegram / Instagram), then the right field for whichever
+  is picked: phone number for WhatsApp, username for Telegram/Instagram.
+  The pre-filled message field only shows for WhatsApp and Telegram --
+  Instagram's `ig.me` links don't support one, so a note explains that
+  instead. After submitting: a live preview card styled for the chosen
+  platform, the link (green), the private manage link (black, with a
+  warning to save it), and a QR code
+- `/api/create` — validates per-platform (phone required for WhatsApp,
+  username required for Telegram/Instagram), 4MB upload cap, strips EXIF
+  + compresses to WebP via `sharp`, uploads to Supabase Storage,
+  generates a unique slug + private manage token, writes the DB row
 - `/[slug]` — the public page visitors land on: flyer image, business
-  name, a "Chat on WhatsApp" button with the real WhatsApp icon. The link
-  preview shown when this URL is pasted into WhatsApp/Instagram pulls the
-  actual flyer image via Open Graph tags -- this is already correct in
-  code; if a preview ever looks wrong, it's almost always a stale cache
-  from testing an old/broken link, not a code issue (each flyer gets a
-  brand-new URL, so there's never a pre-existing cache for a new one)
-- `/manage/[token]` — stats, QR code, delete. Not a login -- the token is
-  a long random string shown exactly once on the result screen. Whoever
-  holds that URL can manage that one flyer. No recovery path if it's lost;
-  that's a deliberate tradeoff of staying login-free.
+  name, a platform-colored button (WhatsApp green, Telegram blue,
+  Instagram gradient) with that platform's icon. Below it, a secondary
+  "Create your own Flychat link" CTA -- a growth loop for people who
+  land on someone else's flyer
+- `/manage/[token]` — platform, status, views/taps, QR code, delete. Not
+  a login -- the token is a long random string shown once on the result
+  screen. No recovery path if it's lost; a deliberate tradeoff of
+  staying login-free
+- `/qr` — a standalone QR tool, unrelated to the flyer flow: paste any
+  link or text, get a downloadable plain QR code. Below it, a **Pro**
+  card (custom QR color + embedded logo) -- visibly present but
+  disabled/grayed out with a "Coming soon" note. No payment system
+  exists yet, so this is UI-only for now: it previews the upsell without
+  pretending to actually gate anything
+
+## Multi-platform links
+
+- **WhatsApp** (`wa.me/<number>`) -- phone number, pre-filled message
+  supported
+- **Telegram** (`t.me/<username>`) -- username only (not phone -- the
+  phone-based version only works if the recipient allows lookup-by-number,
+  which most people don't), pre-filled message supported
+- **Instagram** (`ig.me/m/<username>`) -- username only, Meta's official
+  format, works well on mobile, **not supported on Instagram Web**
+  (degrades to a profile visit), no pre-filled message support at all
+- **X was deliberately left out** -- its DM links need a numeric user ID
+  (not the @handle), which most people don't know offhand, and silently
+  fail unless the recipient has "message requests from everyone" on.
+  Weakest of the four by a wide margin; revisit only if it's clearly
+  worth the added friction later
+
+All platform differences (label, which field to show, whether a message
+is supported, how the final URL is built) live in one place:
+`lib/platforms.js`. Adding a platform later means editing that file plus
+wiring its icon into `components/PlatformIcons.jsx` and its button color
+into `globals.css` -- nothing else should need to change.
 
 ## Layout and design
 
 - `.page` (outer wrapper) is full width with `min-height: 100vh` -- the
   background, header and footer reach edge to edge on any screen size.
   `.page-content` is the centered readable column inside it (480px by
-  default, 560px for the flyer image page, 860px for the landing page's
-  multi-column sections)
-- White background, black used for the header/footer, red as the one
-  accent on primary buttons (brighter red on hover). WhatsApp green is
-  reserved for the WhatsApp button only
+  default, 560px for the flyer image page, 860px for the landing page)
+- White background, black is the *default* color for buttons and the
+  header/footer; **red only appears on hover/active button states and
+  input focus** -- it's an interaction accent now, not a resting color
+- Links are green everywhere (`--green`) -- separate from the
+  platform-specific brand colors (WhatsApp green, Telegram blue,
+  Instagram gradient) used only on each platform's own CTA button
 - A subtle animated grid pattern (`components/GridBackground.jsx`) is
-  opt-in per page -- currently used on the landing, create, and manage
-  pages, deliberately left off the public `/[slug]` page so that one
-  stays clean for visitors
-- Header (`components/Header.jsx`) shows the Flychat name + a small nav
-  (Home, Create a link), present on every page including `/[slug]`
-- Footer (`components/Footer.jsx`) shows the Dexred Lab logo + name,
-  email, WhatsApp (links to `wa.me`, doesn't dial), X handle, and
-  location, pulled from `lib/siteConfig.js`. Contact details laid out in
-  two columns
+  opt-in per page -- landing, create, manage, and the QR tool have it;
+  deliberately left off `/[slug]` so that one page stays clean for
+  visitors
+- Header (`components/Header.jsx`): black background, white version of
+  the Dexred Lab logo next to "Flychat", nav links (Home, Create a link,
+  QR code). Present on every page including `/[slug]`
+- Footer (`components/Footer.jsx`): red Dexred Lab logo + name, email,
+  WhatsApp (links to `wa.me`, doesn't dial), X handle, location -- two
+  columns, pulled from `lib/siteConfig.js`
+- Landing page has entrance animations (cards fade up on load, staggered)
+  and a cycling platform name in the hero headline
+  (`components/PlatformCycler.jsx`)
 
 ## Storage limits (Supabase free tier)
 
-- **1GB total file storage** per project -- the number that actually
-  matters long-term. At typical compressed flyer sizes (100-300KB each
-  after the WebP conversion), that's a few thousand flyers before
-  needing to upgrade.
-- The "50MB" shown on the bucket's own settings page is a *per-file*
-  ceiling, unrelated to the 1GB total, and irrelevant anyway since the
-  app's own 4MB cap is stricter.
+- **1GB total file storage** per project. At typical compressed flyer
+  sizes (100-300KB after WebP conversion), that's a few thousand flyers
+  before needing to upgrade.
+- The "50MB" on the bucket's own settings page is a *per-file* ceiling,
+  unrelated to the 1GB total, and irrelevant anyway since the app's own
+  4MB cap is stricter.
 - Free projects **pause after 7 days of no activity** -- one click in
-  the Supabase dashboard to resume if that happens.
+  the dashboard to resume.
 
-## Free-tier feature set (single system, no paid-tier branching yet)
+## Free-tier feature set
 
-- Random short link for every flyer
-- Plain QR code, downloadable
+- Random short link for every flyer, any of the three platforms
+- Plain QR code, downloadable, for both flyer links and the standalone
+  `/qr` tool
 - Basic view/click totals
 - No account needed anywhere in the flow
 
-Custom slugs, branded QR codes, time-series analytics, and removing the
-footer branding were discussed as possible Pro-tier additions later --
-nothing in this codebase branches on a plan/tier yet.
+**Pro, visually scoped but not functional yet:** custom-color + logo QR
+codes (the disabled card on `/qr`). Custom slugs, time-series analytics,
+and removing footer branding were discussed earlier as further Pro
+candidates -- none of that is built either.
 
 ## Still open before a real launch
 
@@ -98,5 +145,7 @@ nothing in this codebase branches on a plan/tier yet.
   `reports_count` -- but no report endpoint or review flow yet)
 - Rate limiting is basic (IP-based, in Postgres), not hardened against
   spoofing
-- No privacy policy page yet -- worth having given phone numbers and
+- No privacy policy page yet -- worth having given contact details and
   images are stored (NDPR applies)
+- No actual payment/Pro-tier system -- the Pro QR card is a visual
+  preview only, nothing is enforced

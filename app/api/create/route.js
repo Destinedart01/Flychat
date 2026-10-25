@@ -3,6 +3,7 @@ import sharp from 'sharp';
 import crypto from 'crypto';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { slugify, randomSuffix } from '@/lib/slug';
+import { PLATFORMS } from '@/lib/platforms';
 
 export const runtime = 'nodejs';
 
@@ -18,17 +19,35 @@ export async function POST(req) {
   try {
     const formData = await req.formData();
     const file = formData.get('image');
+    const platform = (formData.get('platform') || 'whatsapp').toString();
     const countryCode = (formData.get('countryCode') || '').toString().trim();
     const phone = (formData.get('phone') || '').toString().replace(/[^0-9]/g, '');
+    const username = (formData.get('username') || '').toString().trim().replace(/^@/, '');
     const businessName = (formData.get('businessName') || '').toString().trim();
     const message = (formData.get('message') || '').toString().trim();
+
+    if (!PLATFORMS[platform]) {
+      return NextResponse.json({ error: 'Invalid platform.' }, { status: 400 });
+    }
+    const platformConfig = PLATFORMS[platform];
 
     if (!file || typeof file === 'string') {
       return NextResponse.json({ error: 'Flyer image is required.' }, { status: 400 });
     }
-    if (!countryCode || !phone) {
-      return NextResponse.json({ error: 'WhatsApp number is required.' }, { status: 400 });
+
+    if (platform === 'whatsapp') {
+      if (!countryCode || !phone) {
+        return NextResponse.json({ error: 'WhatsApp number is required.' }, { status: 400 });
+      }
+    } else {
+      if (!username) {
+        return NextResponse.json(
+          { error: `${platformConfig.label} username is required.` },
+          { status: 400 }
+        );
+      }
     }
+
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json({ error: 'Please upload a JPG, PNG or WebP image.' }, { status: 400 });
     }
@@ -88,9 +107,11 @@ export async function POST(req) {
       slug,
       image_path: imagePath,
       business_name: businessName || null,
-      country_code: countryCode,
-      phone,
-      whatsapp_message: message || null,
+      platform,
+      country_code: platform === 'whatsapp' ? countryCode : null,
+      phone: platform === 'whatsapp' ? phone : null,
+      username: platform !== 'whatsapp' ? username : null,
+      prefill_message: platformConfig.supportsMessage && message ? message : null,
       manage_token: manageToken,
       creator_ip: ip,
     });

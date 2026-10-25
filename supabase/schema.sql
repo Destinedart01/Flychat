@@ -1,4 +1,7 @@
--- Already run once -- kept here for reference / fresh environments.
+-- Fresh-install schema. If you already ran an earlier version of this
+-- file against a live project, use supabase/migration-platforms.sql
+-- instead -- running this one again won't retroactively add the new
+-- columns to an existing table.
 
 create extension if not exists pgcrypto;
 
@@ -7,9 +10,23 @@ create table if not exists public.flyers (
   slug text unique not null,
   image_path text not null,
   business_name text,
-  country_code text not null,
-  phone text not null,
-  whatsapp_message text,
+
+  -- Which platform this flyer's CTA button points to.
+  platform text not null default 'whatsapp' check (platform in ('whatsapp', 'telegram', 'instagram')),
+
+  -- WhatsApp uses country_code + phone. Telegram and Instagram use
+  -- username instead (see README for why -- phone-based Telegram links
+  -- aren't reliable, and Instagram has no phone-based option at all).
+  -- All three are nullable since only the relevant pair/field is set
+  -- depending on `platform`.
+  country_code text,
+  phone text,
+  username text,
+
+  -- Pre-filled message shown when the chat opens. Supported by WhatsApp
+  -- and Telegram, not supported by Instagram's ig.me links.
+  prefill_message text,
+
   manage_token text unique not null,
   status text not null default 'active' check (status in ('active', 'flagged', 'removed')),
   view_count integer not null default 0,

@@ -10,6 +10,9 @@
   --red-hover: #ff2d42;
   --red-soft: #fbe9eb;
 
+  --green: #1ea053;
+  --green-dark: #157a3f;
+
   --wa: #25d366;
   --wa-dark: #128c4a;
 
@@ -39,17 +42,16 @@ h3 {
   margin: 0;
 }
 
+/* Links: green by default. Red is reserved specifically for button
+   hover/active feedback now, not resting-state links or text. */
 a {
-  color: var(--red);
+  color: var(--green);
 }
 
 a:hover {
-  color: var(--red-hover);
+  color: var(--green-dark);
 }
 
-/* .page spans full width/height; .page-content is the centered readable
-   column inside it. Keeps the footer/header edge-to-edge on any screen
-   while text/forms stay a sensible width. */
 .page {
   width: 100%;
   min-height: 100vh;
@@ -76,33 +78,32 @@ a:hover {
   max-width: 860px;
 }
 
-/* ---- animated grid background (decorative, opt-in per page) ---- */
+/* ---- animated grid background ---- */
 .grid-bg-layer {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background-image: linear-gradient(rgba(200, 16, 46, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200, 16, 46, 0.055) 1px, transparent 1px);
-  background-size: 42px 42px;
-  animation: gridDrift 34s linear infinite;
-  mask-image: radial-gradient(ellipse at top, black 0%, transparent 78%);
-  -webkit-mask-image: radial-gradient(ellipse at top, black 0%, transparent 78%);
+  background-image: linear-gradient(rgba(18, 18, 20, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 18, 20, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(200, 16, 46, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 16, 46, 0.09) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 200px 200px, 200px 200px;
+  animation: gridDrift 28s linear infinite;
 }
 
 @keyframes gridDrift {
   from {
-    background-position: 0 0, 0 0;
+    background-position: 0 0, 0 0, 0 0, 0 0;
   }
   to {
-    background-position: 420px 420px, 420px 420px;
+    background-position: 400px 400px, 400px 400px, 400px 400px, 400px 400px;
   }
 }
 
 /* ---- header / nav ---- */
 .site-header {
-  border-bottom: 1.5px solid var(--line);
-  background: var(--white);
+  background: var(--black);
   position: relative;
   z-index: 2;
 }
@@ -117,15 +118,24 @@ a:hover {
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 18px;
-  color: var(--ink);
+  color: var(--white);
   text-decoration: none;
 }
 
+.brand-logo {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
 .brand:hover {
-  color: var(--ink);
+  color: var(--white);
 }
 
 .nav-links {
@@ -135,15 +145,15 @@ a:hover {
 
 .nav-link {
   font-size: 13.5px;
-  color: var(--ink-soft);
+  color: #a6a6ad;
   text-decoration: none;
 }
 
 .nav-link:hover {
-  color: var(--red);
+  color: var(--green);
 }
 
-/* ---- buttons ---- */
+/* ---- buttons: black at rest, red only on hover/active ---- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -158,7 +168,7 @@ a:hover {
   border: 1.5px solid transparent;
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.05s ease;
 }
 
 .btn:active {
@@ -166,14 +176,15 @@ a:hover {
 }
 
 .btn-primary {
-  background: var(--red);
-  border-color: var(--red);
+  background: var(--black);
+  border-color: var(--black);
   color: var(--white);
 }
 
-.btn-primary:hover {
-  background: var(--red-hover);
-  border-color: var(--red-hover);
+.btn-primary:hover,
+.btn-primary:active {
+  background: var(--red);
+  border-color: var(--red);
 }
 
 .btn-primary:disabled {
@@ -185,14 +196,15 @@ a:hover {
 
 .btn-outline {
   background: transparent;
-  border-color: var(--red);
-  color: var(--red);
+  border-color: var(--black);
+  color: var(--black);
 }
 
-.btn-outline:hover {
+.btn-outline:hover,
+.btn-outline:active {
   background: var(--red-soft);
-  border-color: var(--red-hover);
-  color: var(--red-hover);
+  border-color: var(--red);
+  color: var(--red);
 }
 
 .btn-wa {
@@ -206,6 +218,57 @@ a:hover {
 .btn-wa:hover {
   background: var(--wa-dark);
   border-color: var(--wa-dark);
+}
+
+.btn-telegram {
+  background: #29a9eb;
+  border-color: #29a9eb;
+  color: #fff;
+  padding: 16px 20px;
+  font-size: 15.5px;
+}
+
+.btn-telegram:hover {
+  background: #1483c4;
+  border-color: #1483c4;
+}
+
+.btn-instagram {
+  background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+  border-color: transparent;
+  color: #fff;
+  padding: 16px 20px;
+  font-size: 15.5px;
+}
+
+.btn-instagram:hover {
+  filter: brightness(0.92);
+}
+
+/* ---- platform selector (create form) ---- */
+.platform-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.platform-tab {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  background: var(--white);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.platform-tab.active {
+  background: var(--black);
+  border-color: var(--black);
+  color: #fff;
 }
 
 /* ---- form elements ---- */
@@ -245,7 +308,7 @@ a:hover {
 }
 
 .error-text {
-  color: var(--red);
+  color: var(--black);
   font-size: 13px;
   margin-top: 14px;
 }
@@ -262,11 +325,11 @@ a:hover {
 }
 
 .dropzone:hover {
-  border-color: var(--red);
+  border-color: var(--black);
 }
 
 .dropzone.dragging {
-  border-color: var(--red-hover);
+  border-color: var(--red);
   background: var(--red-soft);
 }
 
@@ -297,14 +360,14 @@ a:hover {
   border-radius: 8px;
 }
 
-/* ---- result screen: link colors + note box ---- */
+/* ---- result screen ---- */
 .link-success {
-  color: var(--wa-dark);
+  color: var(--green);
   font-weight: 600;
 }
 
 .link-success:hover {
-  color: var(--wa);
+  color: var(--green-dark);
 }
 
 .link-manage {
@@ -318,22 +381,22 @@ a:hover {
 .note-box {
   margin-top: 20px;
   padding: 14px 15px;
-  background: var(--red-soft);
-  border: 1px solid #f2c1c9;
+  background: var(--line-soft);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--black);
   border-radius: 8px;
 }
 
 .note-box p {
   font-size: 13px;
   margin: 0;
-  color: #8a0f26;
+  color: var(--black);
 }
 
 .note-box p + p {
   margin-top: 10px;
 }
 
-/* ---- live preview card (result screen) ---- */
 .preview-card {
   margin: 20px 0 30px;
 }
@@ -374,17 +437,28 @@ a:hover {
   margin-bottom: 9px;
 }
 
-.preview-card-wa {
+.preview-card-cta {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-  background: var(--wa);
   color: #fff;
   font-size: 12.5px;
   font-weight: 600;
   padding: 9px 12px;
   border-radius: 7px;
+}
+
+.preview-card-whatsapp {
+  background: var(--wa);
+}
+
+.preview-card-telegram {
+  background: #29a9eb;
+}
+
+.preview-card-instagram {
+  background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
 }
 
 .stat-line {
@@ -416,18 +490,128 @@ a:hover {
 
 .qr-download {
   font-size: 13px;
-  color: var(--red);
+  color: var(--green);
   text-decoration: none;
 }
 
 .qr-download:hover {
-  color: var(--red-hover);
+  color: var(--green-dark);
+}
+
+.visitor-cta {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.visitor-cta p {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+
+/* ---- standalone QR tool page ---- */
+.qr-tool-frame {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 28px 22px;
+  text-align: center;
+  background: var(--white);
+}
+
+.pro-card {
+  position: relative;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 26px 20px 22px;
+  margin-top: 36px;
+  background: var(--line-soft);
+}
+
+.pro-badge {
+  position: absolute;
+  top: -11px;
+  right: 18px;
+  background: var(--black);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+
+.pro-card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.pro-card > p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pro-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.pro-fields input[disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.pro-note {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 12px;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .pro-fields {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---- landing page ---- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hero {
   text-align: center;
   padding-top: 16px;
+  animation: fadeUp 0.55s ease both;
+}
+
+@keyframes cyclerFade {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.platform-cycler {
+  display: inline-block;
+  color: var(--green);
+  animation: cyclerFade 0.35s ease;
 }
 
 .tag {
@@ -438,6 +622,7 @@ a:hover {
   border-radius: 20px;
   padding: 4px 14px;
   margin-bottom: 18px;
+  background: var(--white);
 }
 
 .hero h1 {
@@ -456,26 +641,49 @@ a:hover {
 
 .hero-ctas {
   margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin: 60px 0;
+  margin: 56px 0;
 }
 
 .step-card {
   border: 1.5px solid var(--line);
   border-radius: 12px;
   padding: 22px 20px;
+  background: var(--white);
+  opacity: 0;
+  animation: fadeUp 0.5s ease both;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.steps-grid .step-card:nth-child(1) {
+  animation-delay: 0.08s;
+}
+.steps-grid .step-card:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.steps-grid .step-card:nth-child(3) {
+  animation-delay: 0.28s;
 }
 
 .step-num {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: var(--red);
+  background: var(--black);
   color: #fff;
   display: flex;
   align-items: center;
@@ -497,11 +705,92 @@ a:hover {
   margin: 0;
 }
 
+.section-heading {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 36px;
+}
+
+.usecase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+.usecase-card {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 18px;
+  background: var(--white);
+  opacity: 0;
+  animation: fadeUp 0.5s ease both;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.usecase-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.usecase-grid .usecase-card:nth-child(1) {
+  animation-delay: 0.08s;
+}
+.usecase-grid .usecase-card:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.usecase-grid .usecase-card:nth-child(3) {
+  animation-delay: 0.22s;
+}
+.usecase-grid .usecase-card:nth-child(4) {
+  animation-delay: 0.29s;
+}
+
+.usecase-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--black);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+
+.usecase-card h4 {
+  font-size: 14.5px;
+  margin-bottom: 6px;
+}
+
+.usecase-card p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0;
+}
+
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 56px;
+}
+
+.feature {
+  opacity: 0;
+  animation: fadeUp 0.5s ease both;
+}
+
+.features-grid .feature:nth-child(1) {
+  animation-delay: 0.08s;
+}
+.features-grid .feature:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.features-grid .feature:nth-child(3) {
+  animation-delay: 0.28s;
 }
 
 .feature h4 {
@@ -530,6 +819,9 @@ a:hover {
 @media (max-width: 640px) {
   .steps-grid,
   .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .usecase-grid {
     grid-template-columns: 1fr;
   }
   .hero h1 {
@@ -572,7 +864,7 @@ a:hover {
 }
 
 .site-footer-grid a:hover {
-  color: var(--red-hover);
+  color: var(--green);
 }
 
 .site-footer-bottom {
