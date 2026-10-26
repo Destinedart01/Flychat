@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import GridBackground from '@/components/GridBackground';
+import HeroPattern from '@/components/HeroPattern';
 import PlatformCycler from '@/components/PlatformCycler';
+import { BioLinkIcon, QrFlyerIcon, StoryIcon, MessageIcon } from '@/components/UsecaseIcons';
 
 export default function Home() {
   return (
     <>
       <GridBackground />
-      <main className="page-content wide">
-        <section className="hero">
+
+      <section className="hero-band">
+        <HeroPattern />
+        <div className="hero">
           <div className="tag">No login needed</div>
           <h1>
             Turn your flyer into a <PlatformCycler /> link
@@ -25,8 +29,10 @@ export default function Home() {
               Just need a QR code?
             </Link>
           </div>
-        </section>
+        </div>
+      </section>
 
+      <main className="page-content wide">
         <section className="steps-grid">
           <div className="step-card">
             <div className="step-num">1</div>
@@ -48,22 +54,30 @@ export default function Home() {
         <h2 className="section-heading">Where to put your link</h2>
         <div className="usecase-grid">
           <div className="usecase-card">
-            <div className="usecase-icon">@</div>
+            <div className="usecase-icon">
+              <BioLinkIcon />
+            </div>
             <h4>Link in bio</h4>
             <p>The one link in your Instagram or TikTok bio opens a chat, not a page nobody reads.</p>
           </div>
           <div className="usecase-card">
-            <div className="usecase-icon">▣</div>
+            <div className="usecase-icon">
+              <QrFlyerIcon />
+            </div>
             <h4>QR on flyers &amp; packaging</h4>
             <p>Print it once. Stick it on the flyer itself, a poster, or product packaging.</p>
           </div>
           <div className="usecase-card">
-            <div className="usecase-icon">◎</div>
+            <div className="usecase-icon">
+              <StoryIcon />
+            </div>
             <h4>Stories</h4>
             <p>Add it as a link sticker on an Instagram or Facebook story — one tap, chat opens.</p>
           </div>
           <div className="usecase-card">
-            <div className="usecase-icon">✉</div>
+            <div className="usecase-icon">
+              <MessageIcon />
+            </div>
             <h4>SMS &amp; word of mouth</h4>
             <p>Short enough to text. Share it directly when someone asks how to reach you.</p>
           </div>
