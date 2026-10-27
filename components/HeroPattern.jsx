@@ -1,20 +1,21 @@
-// A field of small chat-bubble glyphs (not the generic "arrow" pattern
-// from the reference image -- a chat bubble ties directly to what
-// Flychat actually does) behind the hero. Each bubble has its own
-// animation-delay based on its row+col position, so the fade plays as a
-// diagonal wave sweeping across the field rather than random twinkling.
-// Opacity is kept low and a white gradient sits on top, so hero text
-// stays fully readable regardless of where the wave currently is.
+// A dense, fairly uniform field of small chat-bubble glyphs (on-brand,
+// not the generic arrow from the reference) layered over the red
+// gradient background. White glyphs read clearly against the dark red
+// at the top, naturally fading out of visibility as the base gradient
+// itself nears white at the bottom -- no separate fade overlay needed.
+// Each bubble has its own animation-delay based on row+col position,
+// so the pulse plays as a diagonal wave rather than random twinkling.
+// A soft radial glow sits on top, centered behind the text, for extra
+// contrast there -- same structure as the reference image.
 export default function HeroPattern() {
-  const cols = 12;
-  const rows = 7;
-  const cell = 52;
+  const cols = 14;
+  const rows = 9;
+  const cell = 46;
 
   const bubbles = [];
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      const dist = Math.hypot(c - cols / 2 + 0.5, r - 1.2);
-      const base = Math.max(0.05, 0.3 - dist * 0.028);
+      const base = 0.42 + ((r * 3 + c) % 5) * 0.03;
       const delay = (r * 0.11 + c * 0.08) % 3.6;
       bubbles.push({ key: `${r}-${c}`, x: c * cell, y: r * cell, base, delay });
     }
@@ -31,16 +32,16 @@ export default function HeroPattern() {
         {bubbles.map(({ key, x, y, base, delay }) => (
           <g
             key={key}
-            transform={`translate(${x + 14}, ${y + 12})`}
+            transform={`translate(${x + 11}, ${y + 10})`}
             className="hero-pattern-bubble"
             style={{ animationDelay: `${delay}s`, '--base-opacity': base }}
           >
-            <rect x="0" y="0" width="22" height="15" rx="4.5" fill="#c8102e" />
-            <path d="M4 15 L4 21 L10.5 15 Z" fill="#c8102e" />
+            <rect x="0" y="0" width="19" height="13" rx="4" fill="#ffffff" />
+            <path d="M3.5 13 L3.5 18 L9 13 Z" fill="#ffffff" />
           </g>
         ))}
       </svg>
-      <div className="hero-pattern-fade" />
+      <div className="hero-pattern-glow" />
     </div>
   );
 }

@@ -225,9 +225,26 @@ a:hover {
 
 .btn-outline:hover,
 .btn-outline:active {
-  background: var(--red-soft);
+  background: var(--red);
   border-color: var(--red);
-  color: var(--red);
+  color: var(--white);
+}
+
+/* Same rule, for use on the dark/red hero backdrop specifically --
+   white at rest, solid red + white text on hover/active. Text color
+   never changes, only the background does, per the "only the hover
+   color changes to red, text stays white" rule. */
+.btn-outline-light {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.65);
+  color: var(--white);
+}
+
+.btn-outline-light:hover,
+.btn-outline-light:active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
 }
 
 .btn-wa {
@@ -614,11 +631,24 @@ a:hover {
   }
 }
 
+/* Red gradient banner, matching the reference's structure: a dark,
+   saturated color at the top easing down through the brand red into
+   white at the bottom -- the pattern sits on top fairly uniformly
+   rather than fading on its own, and a soft radial glow lightens the
+   zone directly behind the text for contrast, same as the reference. */
 .hero-band {
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: 64px 22px 44px;
+  padding: 72px 22px 56px;
+  background: linear-gradient(
+    180deg,
+    #4a0712 0%,
+    #8a0f24 24%,
+    #c8102e 50%,
+    #e98a97 80%,
+    #ffffff 100%
+  );
 }
 
 .hero-pattern {
@@ -638,7 +668,7 @@ a:hover {
 @keyframes bubblePulse {
   0%,
   100% {
-    opacity: calc(var(--base-opacity) * 0.35);
+    opacity: calc(var(--base-opacity) * 0.4);
   }
   50% {
     opacity: var(--base-opacity);
@@ -649,10 +679,15 @@ a:hover {
   animation: bubblePulse 4.2s ease-in-out infinite;
 }
 
-.hero-pattern-fade {
+.hero-pattern-glow {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.72) 68%, rgba(255, 255, 255, 1) 100%);
+  background: radial-gradient(
+    ellipse 55% 60% at 50% 42%,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 255, 255, 0.12) 45%,
+    rgba(255, 255, 255, 0) 75%
+  );
 }
 
 .hero {
@@ -677,30 +712,31 @@ a:hover {
 
 .platform-cycler {
   display: inline-block;
-  color: var(--green);
+  color: var(--white);
   animation: cyclerFade 0.35s ease;
 }
 
 .tag {
   display: inline-block;
   font-size: 12.5px;
-  color: var(--ink-soft);
-  border: 1.5px solid var(--line);
+  color: var(--white);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
   border-radius: 20px;
   padding: 4px 14px;
   margin-bottom: 18px;
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .hero h1 {
   font-size: 34px;
   line-height: 1.15;
   margin-bottom: 16px;
+  color: var(--white);
 }
 
 .hero-sub {
   font-size: 15.5px;
-  color: var(--ink-soft);
+  color: rgba(255, 255, 255, 0.86);
   line-height: 1.6;
   max-width: 520px;
   margin: 0 auto 30px;

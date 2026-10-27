@@ -114,12 +114,18 @@ into `globals.css` -- nothing else should need to change.
 - Landing page has entrance animations (cards fade up on load, staggered)
   and a cycling platform name in the hero headline
   (`components/PlatformCycler.jsx`)
-- Hero banner (`components/HeroPattern.jsx`) is a full-bleed red field of
-  small chat-bubble glyphs -- on-brand rather than a generic shape --
-  each with its own animation delay based on row+col position, so the
-  fade plays as a diagonal wave rather than random twinkling. A white
-  gradient sits on top so hero text stays fully readable regardless of
-  where the wave currently is
+- Hero banner (`.hero-band` + `components/HeroPattern.jsx`) matches the
+  reference's structure: a dark-red-to-white vertical gradient as the
+  base, a dense, fairly uniform field of small white chat-bubble glyphs
+  on top (on-brand rather than a generic shape), each with its own
+  animation delay based on row+col position so the pulse plays as a
+  diagonal wave, and a soft radial white glow centered behind the hero
+  text for extra contrast -- same approach as the reference, just red
+  and with Flychat's own glyph. Hero text is white while on this band;
+  the rest of the page is unaffected
+- `.btn-outline-light` is the hero-specific button style for a dark
+  backdrop: white border/text at rest, solid red + white text on
+  hover -- text color never changes, only the background does
 - Usecase card icons (`components/UsecaseIcons.jsx`) are small line-style
   SVG illustrations, not photographic images -- there's no image
   generation tool available in this environment, so this is the honest

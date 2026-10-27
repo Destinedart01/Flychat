@@ -25,7 +25,7 @@ export default function Home() {
             <Link href="/create" className="btn btn-primary" style={{ width: 'auto', padding: '14px 28px' }}>
               Create your link
             </Link>
-            <Link href="/qr" className="btn btn-outline" style={{ width: 'auto', padding: '14px 28px' }}>
+            <Link href="/qr" className="btn btn-outline-light" style={{ width: 'auto', padding: '14px 28px' }}>
               Just need a QR code?
             </Link>
           </div>
