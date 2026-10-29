@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import GridBackground from '@/components/GridBackground';
-import HeroPattern from '@/components/HeroPattern';
 import PlatformCycler from '@/components/PlatformCycler';
 import { BioLinkIcon, QrFlyerIcon, StoryIcon, MessageIcon } from '@/components/UsecaseIcons';
 
@@ -10,7 +9,7 @@ export default function Home() {
       <GridBackground />
 
       <section className="hero-band">
-        <HeroPattern />
+        <div className="hero-pattern-glow" aria-hidden="true" />
         <div className="hero">
           <div className="tag">No login needed</div>
           <h1>

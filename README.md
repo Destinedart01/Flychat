@@ -114,18 +114,20 @@ into `globals.css` -- nothing else should need to change.
 - Landing page has entrance animations (cards fade up on load, staggered)
   and a cycling platform name in the hero headline
   (`components/PlatformCycler.jsx`)
-- Hero banner (`.hero-band` + `components/HeroPattern.jsx`) matches the
-  reference's structure: a dark-red-to-white vertical gradient as the
-  base, a dense, fairly uniform field of small white chat-bubble glyphs
-  on top (on-brand rather than a generic shape), each with its own
-  animation delay based on row+col position so the pulse plays as a
-  diagonal wave, and a soft radial white glow centered behind the hero
-  text for extra contrast -- same approach as the reference, just red
-  and with Flychat's own glyph. Hero text is white while on this band;
-  the rest of the page is unaffected
-- `.btn-outline-light` is the hero-specific button style for a dark
-  backdrop: white border/text at rest, solid red + white text on
-  hover -- text color never changes, only the background does
+- Hero banner (`.hero-band`) uses a real photo (`public/hero-bg.jpg`) as
+  the background -- no generated/animated pattern anymore. A dark radial
+  scrim (`.hero-pattern-glow`) sits on top specifically behind the text
+  to guarantee the white headline stays readable regardless of exactly
+  how bright the photo is at that spot, plus the headline/subtitle/tag
+  all carry a subtle text-shadow for extra separation from the image.
+  The cycling platform word (WhatsApp/Telegram/Instagram) is bright
+  orange (`#ff7a1a`) for contrast against the red photo; the rest of the
+  headline stays white
+- `.btn-outline-light` is the secondary hero button: a frosted-glass
+  panel at rest (white ~26% opacity + blur, **black** text -- white text
+  would fail contrast on a light glass panel), solid red + white text on
+  hover/active. `.btn-primary` is unaffected and stays black at rest
+  everywhere, same as before
 - Usecase card icons (`components/UsecaseIcons.jsx`) are small line-style
   SVG illustrations, not photographic images -- there's no image
   generation tool available in this environment, so this is the honest
