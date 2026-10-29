@@ -120,6 +120,11 @@ into `globals.css` -- nothing else should need to change.
   to guarantee the white headline stays readable regardless of exactly
   how bright the photo is at that spot, plus the headline/subtitle/tag
   all carry a subtle text-shadow for extra separation from the image.
+  The bottom ~190px of the banner fades into the white page via an
+  eased multi-stop gradient (`.hero-band::after`), with extra bottom
+  padding so the fade sits below the buttons rather than behind them.
+  The step and usecase cards have a thin bright-red outline and a
+  visible resting shadow that deepens on hover.
   The cycling platform word (WhatsApp/Telegram/Instagram) is bright
   orange (`#ff7a1a`) for contrast against the red photo; the rest of the
   headline stays white
