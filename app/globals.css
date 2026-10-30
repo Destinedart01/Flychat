@@ -6,7 +6,7 @@
   --line: #e6e6e9;
   --line-soft: #f0f0f2;
 
-  --red: #c8102e;
+  --red: #af0000;
   --red-hover: #ff2d42;
   --red-soft: #fbe9eb;
 
@@ -177,7 +177,7 @@ a:hover {
 }
 
 .nav-link:hover {
-  color: var(--green);
+  color: var(--red);
 }
 
 /* ---- buttons: black at rest, red only on hover/active ---- */
@@ -204,7 +204,7 @@ a:hover {
 
 .btn-primary {
   background: var(--black);
-  border-color: var(--black);
+  border-color: var(--red);
   color: var(--white);
 }
 
@@ -223,7 +223,7 @@ a:hover {
 
 .btn-outline {
   background: transparent;
-  border-color: var(--black);
+  border-color: var(--red);
   color: var(--black);
 }
 
@@ -258,7 +258,7 @@ a:hover {
 .btn-wa {
   background: var(--wa);
   border-color: var(--wa);
-  color: #fff;
+  color: white;
   padding: 16px 20px;
   font-size: 15.5px;
 }
@@ -699,6 +699,7 @@ a:hover {
   max-width: 640px;
   margin: 0 auto;
   animation: fadeUp 0.55s ease both;
+  opacity: 15;
 }
 
 @keyframes cyclerFade {
@@ -717,7 +718,7 @@ a:hover {
    black is high-contrast wherever the chip lands. */
 .platform-cycler {
   display: inline-block;
-  color: #ff7a1a;
+  color: #Af0000;
   background: var(--black);
   padding: 0 0.34em 0.06em;
   border-radius: 9px;
