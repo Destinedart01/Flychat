@@ -10,7 +10,8 @@ export default function Header() {
     <header className="site-header">
       <div className="site-header-inner">
         <Link href="/" className="brand">
-          <img src={siteConfig.logoNav} alt={siteConfig.ownerBrand} className="brand-logo" />
+          <img src={siteConfig.logoNav} alt={siteConfig.ownerBrand}
+          className="brand-logo" />
           <span>
             {first}
             <span className="brand-accent">{rest}</span>

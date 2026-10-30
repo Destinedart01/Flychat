@@ -699,7 +699,7 @@ a:hover {
   max-width: 640px;
   margin: 0 auto;
   animation: fadeUp 0.55s ease both;
-  opacity: 15;
+  opacity: 25;
 }
 
 @keyframes cyclerFade {
@@ -718,8 +718,8 @@ a:hover {
    black is high-contrast wherever the chip lands. */
 .platform-cycler {
   display: inline-block;
-  color: #Af0000;
-  background: var(--black);
+  color: #fff;
+  background: var(--red);
   padding: 0 0.34em 0.06em;
   border-radius: 9px;
   animation: cyclerFade 0.35s ease;
@@ -949,7 +949,7 @@ a:hover {
 
 /* ---- footer ---- */
 .site-footer {
-  background: var(--red);
+  background: var(--black);
   color: var(--white);
   margin-top: auto;
   position: relative;
@@ -963,7 +963,7 @@ a:hover {
 }
 
 .footer-logo {
-  height: 34px;
+  height: 45px;
   width: auto;
   display: block;
   margin-bottom: 16px;

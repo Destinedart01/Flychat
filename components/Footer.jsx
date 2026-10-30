@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="site-footer-inner">
-        <img src={siteConfig.logo} alt={siteConfig.ownerBrand} className="footer-logo" />
+        <img src={siteConfig.logoNav} alt={siteConfig.ownerBrand} className="footer-logo" />
 
         <div className="site-footer-grid">
           <div>
