@@ -142,6 +142,10 @@ a:hover {
   color: var(--white);
 }
 
+.brand-accent {
+  color: var(--red-hover);
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -230,16 +234,15 @@ a:hover {
   color: var(--white);
 }
 
-/* Secondary hero button: frosted glass at rest (white text would fail
-   contrast on a light glass panel, so this one uses black text instead),
-   solid red + white text on hover/active -- same "hover turns red" rule
-   as every other button, just with dark resting text since the resting
-   background here is light rather than black. */
+/* Secondary hero button: frosted glass at rest, sitting on the light hero
+   image -- a fairly opaque white panel with a dark hairline border so it
+   stays visible on pale areas, black text for contrast. Hover/active:
+   solid red + white text, same rule as every other button. */
 .btn-outline-light {
-  background: rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-color: rgba(255, 255, 255, 0.6);
+  border-color: rgba(18, 18, 20, 0.35);
   color: var(--black);
 }
 
@@ -649,7 +652,7 @@ a:hover {
   padding: 72px 22px 140px;
   background-image: url('/hero-bg.jpg');
   background-size: cover;
-  background-position: center top;
+  background-position: 64% 40%;
   background-repeat: no-repeat;
 }
 
@@ -682,10 +685,10 @@ a:hover {
   inset: 0;
   z-index: 0;
   background: radial-gradient(
-    ellipse 60% 65% at 50% 40%,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.12) 45%,
-    rgba(0, 0, 0, 0) 75%
+    ellipse 62% 66% at 50% 42%,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.24) 50%,
+    rgba(255, 255, 255, 0) 80%
   );
 }
 
@@ -709,39 +712,46 @@ a:hover {
   }
 }
 
+/* The animated word sits in a black chip with orange text: orange alone
+   can't be trusted on a light image with a red glow in it, but orange on
+   black is high-contrast wherever the chip lands. */
 .platform-cycler {
   display: inline-block;
   color: #ff7a1a;
+  background: var(--black);
+  padding: 0 0.34em 0.06em;
+  border-radius: 9px;
   animation: cyclerFade 0.35s ease;
 }
 
 .tag {
   display: inline-block;
   font-size: 12.5px;
-  color: var(--white);
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  color: var(--black);
+  border: 1.5px solid rgba(18, 18, 20, 0.28);
   border-radius: 20px;
   padding: 4px 14px;
   margin-bottom: 18px;
-  background: rgba(255, 255, 255, 0.14);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.65);
 }
 
 .hero h1 {
   font-size: 34px;
-  line-height: 1.15;
+  line-height: 1.22;
   margin-bottom: 16px;
-  color: var(--white);
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+  color: var(--black);
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.75);
 }
 
 .hero-sub {
   font-size: 15.5px;
-  color: rgba(255, 255, 255, 0.94);
+  font-weight: 500;
+  color: #1f1f23;
   line-height: 1.6;
   max-width: 520px;
   margin: 0 auto 30px;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
 }
 
 .hero-ctas {
@@ -938,8 +948,8 @@ a:hover {
 
 /* ---- footer ---- */
 .site-footer {
-  background: var(--black);
-  color: #d8d8dc;
+  background: var(--red);
+  color: var(--white);
   margin-top: auto;
   position: relative;
   z-index: 1;
@@ -963,21 +973,62 @@ a:hover {
   grid-template-columns: 1fr 1fr;
   gap: 10px 18px;
   font-size: 13px;
-  color: #a6a6ad;
+  color: var(--white);
 }
 
 .site-footer-grid a {
-  color: #a6a6ad;
+  color: var(--white);
+  text-decoration: none;
 }
 
 .site-footer-grid a:hover {
-  color: var(--green);
+  color: var(--white);
+  text-decoration: underline;
 }
 
 .site-footer-bottom {
   margin-top: 22px;
   padding-top: 18px;
-  border-top: 1px solid #2a2a2e;
+  border-top: 1px solid rgba(255, 255, 255, 0.38);
   font-size: 12px;
-  color: #7a7a81;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ---- generated-link rows with a copy button in front ---- */
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.link-row a {
+  flex: 1;
+  min-width: 0;
+  word-break: break-all;
+  font-size: 14.5px;
+}
+
+.copy-btn {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--white);
+  background: var(--black);
+  border: 1.5px solid var(--black);
+  border-radius: 7px;
+  padding: 7px 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.copy-btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.copy-btn.copied {
+  background: var(--green);
+  border-color: var(--green);
 }

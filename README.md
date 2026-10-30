@@ -114,25 +114,29 @@ into `globals.css` -- nothing else should need to change.
 - Landing page has entrance animations (cards fade up on load, staggered)
   and a cycling platform name in the hero headline
   (`components/PlatformCycler.jsx`)
-- Hero banner (`.hero-band`) uses a real photo (`public/hero-bg.jpg`) as
-  the background -- no generated/animated pattern anymore. A dark radial
-  scrim (`.hero-pattern-glow`) sits on top specifically behind the text
-  to guarantee the white headline stays readable regardless of exactly
-  how bright the photo is at that spot, plus the headline/subtitle/tag
-  all carry a subtle text-shadow for extra separation from the image.
-  The bottom ~190px of the banner fades into the white page via an
-  eased multi-stop gradient (`.hero-band::after`), with extra bottom
-  padding so the fade sits below the buttons rather than behind them.
-  The step and usecase cards have a thin bright-red outline and a
-  visible resting shadow that deepens on hover.
-  The cycling platform word (WhatsApp/Telegram/Instagram) is bright
-  orange (`#ff7a1a`) for contrast against the red photo; the rest of the
-  headline stays white
-- `.btn-outline-light` is the secondary hero button: a frosted-glass
-  panel at rest (white ~26% opacity + blur, **black** text -- white text
-  would fail contrast on a light glass panel), solid red + white text on
-  hover/active. `.btn-primary` is unaffected and stays black at rest
-  everywhere, same as before
+- Hero banner (`.hero-band`) uses a light photo (`public/hero-bg.jpg`, a
+  soft red glow on white/pink vertical stripes). Because the image is
+  light, hero text is near-black with a faint white halo, backed by a
+  soft white scrim (`.hero-pattern-glow`) so it stays readable even where
+  the red glow sits behind it. The cycling platform word
+  (WhatsApp/Telegram/Instagram) sits in a black chip with orange text --
+  orange alone can't be trusted on a light image with red in it, but
+  orange on black is high-contrast wherever the chip lands. The bottom
+  ~190px fades into the white page via an eased multi-stop gradient
+  (`.hero-band::after`), with extra bottom padding so the fade sits
+  below the buttons. The source image is only 612px wide; it's upscaled
+  to 1800px, which is fine for smooth gradients but would show softness
+  on a detailed image
+- `.btn-outline-light` (secondary hero button) is frosted glass -- fairly
+  opaque white + blur + a dark hairline border so it's visible on pale
+  areas, black text -- and turns solid red with white text on hover.
+  `.btn-primary` stays black at rest everywhere
+- Generated links (result screen) have a **Copy** button in front of them
+  (`components/CopyButton.jsx`), for both the public link and the private
+  manage link. Uses the Clipboard API with a textarea fallback for
+  in-app browsers that block it; shows "Copied" for ~2s
+- Header: black bar, red Dexred Lab logo, wordmark "Fly" (white) +
+  "chat" (red). Footer: red background, white text, black logo
 - Usecase card icons (`components/UsecaseIcons.jsx`) are small line-style
   SVG illustrations, not photographic images -- there's no image
   generation tool available in this environment, so this is the honest

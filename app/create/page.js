@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import QrCode from '@/components/QrCode';
 import FlyerPreviewCard from '@/components/FlyerPreviewCard';
 import GridBackground from '@/components/GridBackground';
+import CopyButton from '@/components/CopyButton';
 import { PLATFORMS, PLATFORM_KEYS, getPlatform } from '@/lib/platforms';
 
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -117,11 +118,12 @@ export default function CreatePage() {
         <GridBackground />
         <main className="page-content">
           <h1 style={{ fontSize: 21 }}>Your link is ready</h1>
-          <p style={{ fontSize: 14.5, wordBreak: 'break-all', marginTop: 18 }}>
+          <div className="link-row">
+            <CopyButton value={link} />
             <a href={link} className="link-success">
               {link}
             </a>
-          </p>
+          </div>
 
           <FlyerPreviewCard imageSrc={preview} businessName={businessName} platform={platform} />
 
@@ -130,11 +132,12 @@ export default function CreatePage() {
               Save this manage link somewhere safe. It's the only way to see your
               stats or delete this flyer later — there's no account to log back into.
             </p>
-            <p style={{ wordBreak: 'break-all' }}>
+            <div className="link-row" style={{ marginTop: 10 }}>
+              <CopyButton value={manageLink} />
               <a href={manageLink} className="link-manage">
                 {manageLink}
               </a>
-            </p>
+            </div>
           </div>
 
           <div style={{ marginTop: 28 }}>

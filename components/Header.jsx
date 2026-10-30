@@ -2,12 +2,19 @@ import Link from 'next/link';
 import { siteName, siteConfig } from '@/lib/siteConfig';
 
 export default function Header() {
+  // "Fly" in white, "chat" in red
+  const first = siteName.slice(0, 3);
+  const rest = siteName.slice(3);
+
   return (
     <header className="site-header">
       <div className="site-header-inner">
         <Link href="/" className="brand">
-          <img src="/dexred-lab-logo-white.png" alt={siteConfig.ownerBrand} className="brand-logo" />
-          {siteName}
+          <img src={siteConfig.logoNav} alt={siteConfig.ownerBrand} className="brand-logo" />
+          <span>
+            {first}
+            <span className="brand-accent">{rest}</span>
+          </span>
         </Link>
         <nav className="nav-links">
           <Link href="/" className="nav-link">
